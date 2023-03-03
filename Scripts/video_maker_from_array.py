@@ -11,7 +11,7 @@ from tkinter import filedialog
 root = tk.Tk()
 root.withdraw()
 
-file_path = filedialog.askopenfilename(title = "Abra o video em formato de texto", filetype=(("Arquivos de texto","*.txt"),("Todos os arquivos","*.*")))    # abre explorer
+file_path = filedialog.askopenfilename(title = "Abra o video dentro do .MAT (Images_U_V.mat)", filetype=(("Arquivos .MAT","*.mat"),("Todos os arquivos","*.*")))    # abre explorer
 main_folder = os.path.split(file_path)[0]+'/'
 dados = loadmat(file_path)
 Imagem = dados['Imagens']
@@ -31,6 +31,7 @@ np_Imagens = 255 * np_Imagens
 np_Imagens = np_Imagens.astype(np.uint8)
 
 out = cv2.VideoWriter((main_folder+'video_render.avi'),cv2.VideoWriter_fourcc(*'DIVX'), FPS, frameSize)
+print(f"Video saved at {main_folder}")
 
 for i in range(N_frames):
     img = np_Imagens[:,:,i]
