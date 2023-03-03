@@ -1,2 +1,2 @@
 # pendelluft
-A algorithm for pendelluft detection in EIT imaging
+An algorithm for pendelluft detection in EIT imaging
