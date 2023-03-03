@@ -1,12 +1,15 @@
+# this script is intended to compare HS and Farneback methods by plotting U and V vectors from two .mat files on the same frame image
 from scipy.io import loadmat
 import numpy as np
 import matplotlib.pyplot as plt
 
+# here we load .mat files with Images, u and v for the normal pig
+#   make sure that those files are in the same folder as this script
 HS = loadmat('Normal_HS.mat')
 FB = loadmat('Normal_FB.mat')
 
 frame_ML = 36 #ML stands for MatLab
-frame_py = frame_ML-1 #py stands for phuck you
+frame_py = frame_ML-1 #py stands for python
 
 img_hs = HS['Imagens'][:,:,frame_py]
 u_hs = HS['u'][:,:,frame_py]
@@ -19,7 +22,7 @@ r, c = np.shape(img_hs)
 
 x, y = np.meshgrid(np.arange(r),np.arange(c))
 
-#plot the shit
+#plot both u and v for HS and Farneback on the same frame
 
 plt.figure(dpi=300)
 plt.title(f'Frame {frame_ML}')
