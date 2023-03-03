@@ -51,35 +51,5 @@ def runDHHD(mv_u,mv_v):
 
     potE,potW = pt2.potential_calculation2(mv_x,mv_y,mv_u,mv_v,node_info);
     print('Exited potential_calculation2: %0.3f s'%(time.time()-t_i))
-    '''
-    veldcalc = {}
-    velrcalc  ={}
-    
-    
-    lm = maximum_filter(potE,8)
-    potEmax = (potE == lm) 
-    
-    lm = minimum_filter(potE,8)
-    potEmin = (potE == lm) 
-    
-    lm = maximum_filter(potW,8)
-    potWmax = (potW == lm) 
-    
-    lm = minimum_filter(potW,8)
-    potWmin= (potW == lm) 
-    
-    
-    Emax_r,Emax_c= np.where(potEmax==1);
-    Emin_r,Emin_c= np.where(potEmin==1);
-    Wmax_r,Wmax_c= np.where(potWmax==1);
-    Wmin_r,Wmin_c= np.where(potWmin==1);
 
-    veldcalc['u'],veldcalc['v'] = np.gradient(potE)
-    velrcalc['u'],velrcalc['v'] = np.gradient(potW)
-    
-    
-#    velH.u = mv_u - veldcalc.u - velrcalc.u;
-#    velH.v = mv_v - veldcalc.v - velrcalc.v;
-#    
-    '''
     return potE, potW
