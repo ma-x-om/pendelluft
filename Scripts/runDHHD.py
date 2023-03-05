@@ -10,7 +10,7 @@ import potential_calculation2 as pt2
 #from scipy.ndimage.filters import  maximum_filter,minimum_filter
 import time
 
-def runDHHD(mv_u,mv_v):
+def runDHHD(mv_u,mv_v, show_time = False):   
 
     nr,nc = mv_u.shape
     
@@ -47,9 +47,9 @@ def runDHHD(mv_u,mv_v):
     
     
     
-    t_i = time.time()   
+    if show_time: t_i = time.time()   
 
     potE,potW = pt2.potential_calculation2(mv_x,mv_y,mv_u,mv_v,node_info);
-    print('Exited potential_calculation2: %0.3f s'%(time.time()-t_i))
+    if show_time: print('Exited potential_calculation2: %0.3f s'%(time.time()-t_i))
 
     return potE, potW

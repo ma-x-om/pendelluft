@@ -16,6 +16,7 @@ import numpy as np
 import tkinter as tk
 from tkinter import filedialog
 import os
+import time
 
 # load external scripts
 #
@@ -48,11 +49,15 @@ r, c, N_length = np.shape(u) # r e c = dimensoes do MFV e n_length = nº de fram
 potE = np.empty([r,c,N_length])	# Divergence-Free potential
 potW = np.empty([r,c,N_length])	# Curl-Free potentials
 
-for i in np.arange(N_length):
-	potE[:,:,i], potW[:,:,i] = rdhhd.runDHHD(u[:,:,i],v[:,:,i]) #[2:4] with original runDHHD
-	print(f'Análise_{(i+1):03.0f}\n')
+initial_time_seconds = time.time()
 
-print("Fim das análises\n")
+for i in np.arange(N_length):
+	potE[:,:,i], potW[:,:,i] = rdhhd.runDHHD(u[:,:,i],v[:,:,i]) #[2:4] with original runDHHD; 'show_time' = True to show time to exit potential2
+	print(f'Análise {(i+1)}/{N_length+1}', end='\r')
+
+delta_time_seconds = time.time() - initial_time_seconds
+
+print(f"\nFim das análises\n Tempo levado = {delta_time_seconds:.0f} s ou {delta_time_seconds/60:.0f} min")
 
 savemat((main_folder+'potenciaisE_W.mat'),{'potE': potE, 'potW':potW})
 
