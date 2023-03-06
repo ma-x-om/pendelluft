@@ -32,7 +32,7 @@ root.withdraw()
 #########################################
 
 # let's load that precious '.mat' file
-file_path = filedialog.askopenfilename(title = "Abra o arquivo gerado em Code_1.py (Images_U_V.mat)", filetype=(("Arquivos MAT","*.mat"),("Todos os arquivos","*.*")))	# open explorer
+file_path = filedialog.askopenfilename(title = "Abra o arquivo gerado em Code_1.py (Images_U_V.mat)", filetypes=(("Arquivos MAT","*.mat"),("Todos os arquivos","*.*")))	# open explorer
 main_folder = os.path.split(file_path)[0]+'/' #	pasta que contém o arquivo escolhido
 Mat_File = loadmat(file_path)	# open the file in python
 
