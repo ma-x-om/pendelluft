@@ -58,7 +58,7 @@ file_path_mask = filedialog.askopenfilename()	# open explorer
 mask_folder = os.path.splitext(file_path_mask)[0]+'/' #	pasta que contém o arquivo escolhido
 mask_file = loadmat(file_path_mask)	# open the file in python
 '''
-print(os.getcwd())
+
 mask_file = loadmat('LungMask.mat')
 mask = mask_file['BW']
 Right = mask.copy()
