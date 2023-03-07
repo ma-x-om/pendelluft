@@ -43,7 +43,7 @@ root.withdraw()
 #########################################
 
 # let's load that precious '.mat' file
-file_path_pot = filedialog.askopenfilename(title = "Abra o arquivo dos potenciais (potenciaisE_W.mat)", filetype=(("Arquivos MAT","*.mat"),("Todos os arquivos","*.*")))	# open explorer
+file_path_pot = filedialog.askopenfilename(title = "Abra o arquivo dos potenciais (potenciaisE_W.mat)", filetypes=(("Arquivos MAT","*.mat"),("Todos os arquivos","*.*")))	# open explorer
 pot_folder = os.path.split(file_path_pot)[0]+'/' #	pasta que contém o arquivo escolhido
 pot_file = loadmat(file_path_pot)	# open the file in python
 
@@ -58,7 +58,7 @@ file_path_mask = filedialog.askopenfilename()	# open explorer
 mask_folder = os.path.splitext(file_path_mask)[0]+'/' #	pasta que contém o arquivo escolhido
 mask_file = loadmat(file_path_mask)	# open the file in python
 '''
-
+print(os.getcwd())
 mask_file = loadmat('LungMask.mat')
 mask = mask_file['BW']
 Right = mask.copy()
