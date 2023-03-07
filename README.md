@@ -45,7 +45,36 @@ NO! Throughout the codes' executions, various '.mat' files are saved so we can a
 - video_maker_from_array.py: generates a video file in greyscale from images contained in a '.mat' file
 
 ### TODOs:
-- todo
+1. Automatic Segmentation
+    - Sum all frames and apply a baseline to try to create a decent lung mask automatically
+    - Via the previous sum, sum all columns and identify minimum close to the middle (to define center of lungs)
+2. Study
+    - LU matrix factorization
+    - Singular Value Decomposition (SVD)
+    - Principal Component Analysis (PCA)
+3. Optical Flow methods comparison
+    - Implement (or find) Horn & Schunck in Python
+    - Use them in John's rotating cylinder images and see results
+        - [this](https://vision.middlebury.edu/flow/data/) can help test the OF methods
+4. Optimize runtime:
+    - Test/implement Italo's Sobel filter methods for integration (?)
+5. Pendelluft detection method:
+    - Victor's method
+    - Proximity of maximi and minimu Curl-free Potentials
+        - thinking about using a correlation like maximi and/or minimi size divided by the power of 2 of the distance
+        - plot nice 3D images
+
+### Chronogram:
+| Activity \ Period | 1.bi.2023 | 2.bi.2023 | 3.bi.2023 | 4.bi.2023 |
+| :---------------: | :-------: | :-------: | :-------: | :-------: |
+| Translate to Python | x | | | |
+| Automatic segmentation | x | x | | |
+| Different Optical Flow methods | | x | x | |
+| Real-time analysis | | x | x | x |
+| Denoising | | x | x | |
+| Italo's Sobel method | | x | x | |
+| Human data processing | | | x | x |
+| Diversify Pendelluft detection methods | | x | x | x |
 
 Comparison between Python Matplotlib pyplot's quivers and MATLAB's:<br>
 ![image](https://user-images.githubusercontent.com/126175949/222615900-4bb1d8f1-ec9c-4962-b73b-47ae11a98b54.png)
