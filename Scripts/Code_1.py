@@ -109,6 +109,7 @@ X, Y = np.meshgrid(np.arange(r),np.arange(c))	# creates a meshgrid with dimensio
 												# 	and atributes it to variables X and Y
 
 # loop a seguir itera pelos frames de 'Imagens'
+print(f"Rendering and saving pictures to {image_folder}. If you wish to break/stop it, do it the hard way (CTRL C).")
 for it in np.arange(N_frames-1): #np.arange(N_frames-1)
 	plt.figure(dpi=500)
 	plt.imshow(Imagens[:,:,it],vmin=0,vmax=B)	# pega o frame e equaliza a partir de B=vmax
