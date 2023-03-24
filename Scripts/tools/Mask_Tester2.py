@@ -8,6 +8,18 @@ import tkinter as tk
 from tkinter import filedialog
 import os
 import matplotlib.pyplot as plt
+import cv2
+
+def createContour(Image):
+	nx, ny =  np.shape(Image)
+	Image_Contour = np.zeros((nx,ny))
+	Image_Contour_ixs, _ = cv2.findContours(Image, cv2.RETR_TREE, cv2.CHAIN_APPROX_NONE)
+	Image_Contour_squeeze = np.squeeze(Image_Contour_ixs)
+
+	for pixel in contour:
+		Image_Contour[pixel[1],pixel[0]] = 1
+
+	return Image_Contour
 
 root = tk.Tk()
 root.withdraw()
@@ -25,6 +37,7 @@ video = Mat_File['Imagens']
 
 sum_of_all_frames = video.sum(2)
 normalized_sum = sum_of_all_frames/sum_of_all_frames.max()
+sum_uint8 = (normalized_sum*255).astype(np.uint8)
 
 # The following lines will compare the calculated mask with the loaded mask using a variable threshold starting at 1 (max) and comparing how much "True" pixels there are
 # We must also set a tolerance in which we can assume the calculated_mask is the same as the loaded_mask

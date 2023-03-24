@@ -3,6 +3,7 @@
 ### obs: always with an axial cut in mind
 
 from scipy.io import loadmat
+from scipy.io import savemat
 import numpy as np
 import tkinter as tk
 from tkinter import filedialog
@@ -46,3 +47,7 @@ plt.axvline(center_index, color='red')
 plt.axis('off')
 plt.title(f'Threshold of {threshold*100}%\nCenter at pixel {center_index+1} of {np.size(lung_center_sum)}')
 plt.show()
+
+savemat(main_folder+'LungMask.mat',{'BW': lung_mask})	# saves the calculated mask
+with open(main_folder+'center.txt', 'w') as f:
+    f.write(center_index)

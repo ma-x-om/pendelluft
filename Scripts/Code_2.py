@@ -56,9 +56,14 @@ for i in np.arange(N_length):
 	print(f'Análise {(i+1)}/{N_length+1}', end='\r')
 
 delta_time_seconds = time.time() - initial_time_seconds
+seconds = time.time()
+local_time = time.ctime(seconds)
+time_string = f"{local_time} - Tempo levado = {delta_time_seconds:.0f} s ou {delta_time_seconds/60:.0f} min"
 
-print(f"\nFim das análises\n Tempo levado = {delta_time_seconds:.0f} s ou {delta_time_seconds/60:.0f} min")
+print(f"\nFim das análises\n {time_string}")
 
 savemat((main_folder+'potenciaisE_W.mat'),{'potE': potE, 'potW':potW})
+with open(main_folder+'time_log.txt', 'a') as f:
+    f.write(f'\n{time_string}')
 
 print(f'Análises salvas em {main_folder}\n')
