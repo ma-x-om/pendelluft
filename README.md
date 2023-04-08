@@ -46,9 +46,9 @@ NO! Throughout the codes' executions, various '.mat' files are saved so we can a
 
 ### TODOs:
 <i> March 6, 2023 </i>
-1. Automatic Segmentation
-    - Sum all frames and apply a baseline to try to create a decent lung mask automatically
-    - Via the previous sum, sum all columns and identify minimum close to the middle (to define center of lungs)
+1. ~~Automatic Segmentation~~
+    - ~~Sum all frames and apply a baseline to try to create a decent lung mask automatically~~
+    - ~~Via the previous sum, sum all columns and identify minimum close to the middle (to define center of lungs)~~
 2. Study
     - LU matrix factorization
     - Singular Value Decomposition (SVD)
