@@ -6,8 +6,8 @@
 ##	Receives:	'.mat' files from 'Code_1.py' and 'Code_2.py'
 #					'Images_U_V.mat'
 #					'potenciaisE_W.mat'
-#				'LungMask.mat' -> máscara para seccionar a área do pulmão nas imagens
-#					"Baseado em frame em N onde o pulmao aparenta ter o maior volume"
+#				'LungMask.mat' -> máscara para seccionar a área do pulmão nas imagens e centro do pulmão
+#					Calculados automaticamente em "Code_2.py" através do script "Automatic_Segmentation.py"
 ##	Calls:	'Posicoes.py'
 ##			'freqmap.py'
 ##	Outputs:	calculated data into a file
@@ -59,12 +59,13 @@ mask_folder = os.path.splitext(file_path_mask)[0]+'/' #	pasta que contém o arqu
 mask_file = loadmat(file_path_mask)	# open the file in python
 '''
 
-mask_file = loadmat('LungMask.mat')
+mask_file = loadmat(pot_folder+'LungMask.mat')
 mask = mask_file['BW']
+mask_center = int(mask_file['Center'])
 Right = mask.copy()
-Right[:,0:int(r/2)] = 0
+Right[:,0:mask_center] = 0
 Left = mask.copy()
-Left[:,((int(r/2)+1)):r] = 0
+Left[:,((mask_center+1)):r] = 0
 
 ######### here we begin to retrieve maximi and minimi from PotE and PotW
 #########	and separate it in Left and Right
@@ -203,7 +204,7 @@ plt.plot(arr_LE[1][:,0],arr_LE[1][:,1],'kx')
 plt.plot(arr_LE[0][:,0],arr_LE[0][:,1],'kx')
 plt.axis('off')
 plt.colorbar()
-plt.axvline(c/2-1,color='k')
+plt.axvline(mask_center,color='k')
 plt.title('E max')
 
 plt.subplot(222)
@@ -213,7 +214,7 @@ plt.plot(arr_LW[1][:,0],arr_LW[1][:,1],'kx')
 plt.plot(arr_LW[0][:,0],arr_LW[0][:,1],'kx')
 plt.axis('off')
 plt.colorbar()
-plt.axvline(c/2-1,color='k')
+plt.axvline(mask_center,color='k')
 plt.title('W max')
 
 plt.subplot(223)
@@ -223,7 +224,7 @@ plt.plot(arr_LE[2][:,0],arr_LE[2][:,1],'kx')
 plt.plot(arr_LE[3][:,0],arr_LE[3][:,1],'kx')
 plt.axis('off')
 plt.colorbar()
-plt.axvline(c/2-1,color='k')
+plt.axvline(mask_center,color='k')
 plt.title('E min')
 
 plt.subplot(224)
@@ -233,7 +234,7 @@ plt.plot(arr_LW[2][:,0],arr_LW[2][:,1],'kx')
 plt.plot(arr_LW[3][:,0],arr_LW[3][:,1],'kx')
 plt.axis('off')
 plt.colorbar()
-plt.axvline(c/2-1,color='k')
+plt.axvline(mask_center,color='k')
 plt.title('W min')
 plt.show()
 
@@ -248,13 +249,13 @@ plt.subplot(221)
 plt.imshow(E_phi)
 plt.axis('off')
 plt.colorbar()
-plt.axvline(c/2-1,color='k')
+plt.axvline(mask_center,color='k')
 
 plt.subplot(222)
 plt.imshow(W_phi)
 plt.axis('off')
 plt.colorbar()
-plt.axvline(c/2-1,color='k')
+plt.axvline(mask_center,color='k')
 plt.show()
 
 ##

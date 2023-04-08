@@ -7,6 +7,7 @@
 ##	Calls:	'runDHHD.py'
 ##			'potential_calculation2.py'
 ##	Outputs:	updated '.mat' file with Divergence-Free (PotE) and Curl-Free (PotW) components
+##				'LungMask.mat' with Automatically segmented lung mask and calculated center
 
 # load libraries
 #
@@ -21,6 +22,7 @@ import time
 # load external scripts
 #
 import runDHHD as rdhhd
+import Automatic_Segmentation as autoseg
 
 #########################################
 # Initialize tkinter (Tk)
@@ -35,6 +37,7 @@ root.withdraw()
 file_path = filedialog.askopenfilename(title = "Abra o arquivo gerado em Code_1.py (Images_U_V.mat)", filetypes=(("Arquivos MAT","*.mat"),("Todos os arquivos","*.*")))	# open explorer
 main_folder = os.path.split(file_path)[0]+'/' #	pasta que contém o arquivo escolhido
 Mat_File = loadmat(file_path)	# open the file in python
+autoseg.segment_lung(Mat_File, main_folder, show_mask=True)
 
 # decompose that Mat_File into MFVs u and v
 u = Mat_File['u']
