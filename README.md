@@ -1,7 +1,7 @@
 # pendelluft
 <i>An algorithm for pendelluft detection in EIT imaging</i>
 
-PhD Prof. John A. Sims; BME Victor Fidelis; Undergrad Mateus Ramirez;
+PhD Prof. John A. Sims; BME Victor Fidelis; B.S. Mateus Ramirez;
 
 This algorithm's aim is to automatically detect Pendelluft instances in an EIT video recording. I picked on this project somewhen around October/2022 and it was initially coded entirely in MATLAB. My main goal from then to March/2023 was to understand the code then port and adapt it to Python.
 
@@ -46,9 +46,9 @@ NO! Throughout the codes' executions, various '.mat' files are saved so we can a
 
 ### TODOs:
 <i> March 6, 2023 </i>
-1. Automatic Segmentation
-    - Sum all frames and apply a baseline to try to create a decent lung mask automatically
-    - Via the previous sum, sum all columns and identify minimum close to the middle (to define center of lungs)
+1. ~~Automatic Segmentation~~
+    - ~~Sum all frames and apply a baseline to try to create a decent lung mask automatically~~
+    - ~~Via the previous sum, sum all columns and identify minimum close to the middle (to define center of lungs)~~
 2. Study
     - LU matrix factorization
     - Singular Value Decomposition (SVD)
