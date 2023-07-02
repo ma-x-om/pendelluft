@@ -18,6 +18,7 @@ import skimage.transform as skt
 import cv2
 import tkinter as tk
 from tkinter import filedialog
+import SVD_applier as svd
 
 # load external scripts
 #	(as of 21/02/2023 they aren't used)
@@ -71,15 +72,14 @@ Imagens = np.empty([r,c,N_frames])			# great array to hold the future images
 tempoIm = []								# initialize empty lists
 tempocv = []
 
-I = matlab_style_gauss2D()
-
 # o loop abaixo itera, frame by frame, o video original aplicando a filtro I e salvando
 # 	o resultado no array "Imagens"
 for fr in np.arange(N_frames):
 	imagem2d = np.reshape(dados[fr,:]-minimo,(r,c),order='F')
 	imagem2d = skt.rotate(imagem2d, -90)
-	Imagens[:,:,fr] = cv2.filter2D(imagem2d,-1,I)
-	#Imagens[:,:,fr] = imagem2d #deixa a var B (mais pra frente) igual ao Matlab
+	Imagens[:,:,fr] = imagem2d
+
+Imagens = svd.apply_video_svd(Imagens)
 
 # here we initialize the empty arrays u and v, which will hold the motion field vectors
 u = np.empty([r,c,N_frames-1])	# x axis motion field vector

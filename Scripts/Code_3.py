@@ -160,8 +160,8 @@ arr_LE = []
 arr_LW = []
 arr_E = []
 arr_W = []
-arr_LEm = []
-arr_LWm = []
+arr_LEm = [] #  this and the next declared variable are used only to print the highest
+arr_LWm = [] # and the lowest value in the plot (Used only in Victor's matlab code "Principal.m")
 
 #Q1 <-> i=0 <-> L MAX
 #Q2 <-> i=1 <-> R MAX
