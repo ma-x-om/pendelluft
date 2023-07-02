@@ -91,7 +91,7 @@ for i in np.arange(N_length):
 	arr_potW[3][:,:,i] = arr_pot[3][:,:,i]*Right
 
 
-# posE and posW lists
+# posE and posW lists, which are indexes for maxima and minima of each potential
 list_posE = []
 list_posW = []
 
@@ -101,6 +101,7 @@ for i in range(4):
 	list_posE.append(tempE.copy())
 	list_posW.append(tempW.copy())
 	print('*', end='')
+
 
 #####
 #####		Great tool for checking if the plot is the same as Matlab's
@@ -161,7 +162,7 @@ arr_LW = []
 arr_E = []
 arr_W = []
 arr_LEm = [] #  this and the next declared variable are used only to print the highest
-arr_LWm = [] # and the lowest value in the plot (Used only in Victor's matlab code "Principal.m")
+arr_LWm = [] #		and the lowest value in the plot (Used only in Victor's matlab code "Principal.m")
 
 #Q1 <-> i=0 <-> L MAX
 #Q2 <-> i=1 <-> R MAX
@@ -193,7 +194,11 @@ for i in range(2,4):
 	arr_LWm.append(tempW[2].copy())
 
 	print(']')
-
+'''
+good_day = np.array(arr_LW, dtype=object)
+print(f"Good day! Of a shape of {np.shape(good_day)}")
+print(good_day)
+'''
 # Here lies image showing time again, kids!
 
 plt.figure()
@@ -270,8 +275,8 @@ RW_phi = sum(sum(W_phi[:,16:31]))
    # Create a new directory because it does not exist
 #   os.makedirs(pot_folder)
 savemat((pot_folder+'calculos_phi.mat'),{'LE_phi': LE_phi, 'RE_phi':RE_phi,'LW_phi': LW_phi, 'RW_phi': RW_phi})
-savemat((pot_folder+'calculos_pos.mat'),{'list_posE': list_posE, 'list_posW':list_posW})
-savemat((pot_folder+'calculos_freqmap.mat'),{'arr_E': arr_E, 'arr_W':arr_W, 'arr_LWm':arr_LWm, 'arr_LE':arr_LE, 'arr_LW':arr_LW, 'arr_LEm':arr_LEm})
+savemat((pot_folder+'calculos_pos.mat'),{'list_posE': np.array(list_posE,dtype=object), 'list_posW':np.array(list_posW,dtype=object)})
+savemat((pot_folder+'calculos_freqmap.mat'),{'arr_E': arr_E, 'arr_W':arr_W, 'arr_LWm': np.array(arr_LWm,dtype=object), 'arr_LE':np.array(arr_LE,dtype=object), 'arr_LW':np.array(arr_LW,dtype=object), 'arr_LEm':np.array(arr_LEm,dtype=object)})
 
 
 print('\n\n----------------------------------------------------')
