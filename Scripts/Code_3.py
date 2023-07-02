@@ -194,11 +194,7 @@ for i in range(2,4):
 	arr_LWm.append(tempW[2].copy())
 
 	print(']')
-'''
-good_day = np.array(arr_LW, dtype=object)
-print(f"Good day! Of a shape of {np.shape(good_day)}")
-print(good_day)
-'''
+
 # Here lies image showing time again, kids!
 
 plt.figure()
