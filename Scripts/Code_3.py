@@ -75,8 +75,8 @@ arr_potE = [np.zeros((r,c,N_length)), np.zeros((r,c,N_length)), np.zeros((r,c,N_
 arr_potW = [np.zeros((r,c,N_length)), np.zeros((r,c,N_length)), np.zeros((r,c,N_length)), np.zeros((r,c,N_length))]
 
 for i in np.arange(N_length):
-	arr_pot[0][:,:,i] = skim.local_maxima(potE[:,:,i],connectivity=8)
-	arr_pot[1][:,:,i] = skim.local_minima(potE[:,:,i],connectivity=8)
+	arr_pot[0][:,:,i] = skim.local_maxima(potE[:,:,i],connectivity=8)	#	keep in mind (for the future) that using the param indices=True will return the tuple list of where max or min is (the indexes)
+	arr_pot[1][:,:,i] = skim.local_minima(potE[:,:,i],connectivity=8)	#		thus making unnecessary to do this fucking shit and then go on the list adventure of lines 94-103
 	arr_pot[2][:,:,i] = skim.local_maxima(potW[:,:,i],connectivity=8)
 	arr_pot[3][:,:,i] = skim.local_minima(potW[:,:,i],connectivity=8)
 
@@ -102,26 +102,6 @@ for i in range(4):
 	list_posW.append(tempW.copy())
 	print('*', end='')
 
-
-#####
-#####		Great tool for checking if the plot is the same as Matlab's
-'''
-print('Q\n 0 = L E MAX | 1 = R E MAX | 2 = L E MIN | 3 = R E MIN\n')
-print(f'frame: 0 to {N_length-1}\n')
-def check_mm(q, f):
-	print(list_posE[q][:,:,f])
-	print(f'Q{q} frame {f+1}\n\n')
-
-loop = 'y'
-while loop=='y' or loop=='':
-	qq, ff = input('QQ FF: ').split()
-	qq=int(qq)
-	ff=int(ff)
-	check_mm(qq, ff)
-	loop = input("Proceed? (y/n) ")
-'''
-#####
-#####
 
 ### Frequency Maps
 
