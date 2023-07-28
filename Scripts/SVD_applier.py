@@ -155,6 +155,7 @@ def apply_video_svd(images_array, percent=None, level=None, Brightness = False):
 
     u, s, vh = np.linalg.svd(images_reshaped, full_matrices=False)
     S = np.diag(s)
+    cum_sum = np.cumsum(np.diag(S))/np.sum(np.diag(S))
     
     if percent:
         percent = np.array(percent)/100
@@ -175,5 +176,5 @@ def apply_video_svd(images_array, percent=None, level=None, Brightness = False):
                 Bl = Al
     
     if Brightness:
-		return Aq32, Bl
-	return Aq32
+        return Aq32, Bl
+    return Aq32
