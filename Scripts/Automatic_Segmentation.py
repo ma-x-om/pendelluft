@@ -11,14 +11,15 @@ import os
 import matplotlib.pyplot as plt
 import skimage.morphology as skim
 
-'''
-root = tk.Tk()
-root.withdraw()
+def load_video(threshold = 0.135):
+	root = tk.Tk()
+	root.withdraw()
 
-file_path = filedialog.askopenfilename(title = "Abra o arquivo gerado em Code_1.py (Images_U_V.mat)", filetypes=(("Arquivos MAT","*.mat"),("Todos os arquivos","*.*")))	# open explorer
-main_folder = os.path.split(file_path)[0]+'/' #	pasta que contém o arquivo escolhido
-Mat_File = loadmat(file_path)	# open the file in python
-'''
+	file_path = filedialog.askopenfilename(title = "Abra o arquivo gerado em Code_1.py (Images_U_V.mat)", filetypes=(("Arquivos MAT","*.mat"),("Todos os arquivos","*.*")))	# open explorer
+	main_folder = os.path.split(file_path)[0]+'/' #	pasta que contém o arquivo escolhido
+	Mat_File = loadmat(file_path)	# open the file in python
+	segment_lung(Mat_File, main_folder, threshold, show_mask = True)
+
 
 def segment_lung(Mat_File, main_folder, threshold = 0.135, show_mask = False):
 	video = Mat_File['Imagens']
@@ -28,7 +29,7 @@ def segment_lung(Mat_File, main_folder, threshold = 0.135, show_mask = False):
 	sum_of_all_frames = video.sum(2)
 	normalized_sum = sum_of_all_frames/sum_of_all_frames.max()
 
-	#threshold = 0.135 in %
+	#threshold = 0.135 in % for pigs and 0.02 for humans
 	lung_mask = normalized_sum >= threshold
 
 	# For the lung center we will sum up all the columns and then find the local minimum and hope for the best

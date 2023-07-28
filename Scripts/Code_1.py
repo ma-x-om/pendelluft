@@ -62,8 +62,18 @@ if not isExist:
    # Create a new directory because it does not exist
    os.makedirs(image_folder)
 dados = np.loadtxt(file_path)				# atribui o texto do arquivo à variável "dados"
-(N_frames, N_pixels) = np.shape(dados)		# atribui as dimensões nº de frames e de pixels por frame
+'''
+human_pendelluft_start_frame = 5500
+human_pendelluft_end_frame = 7500
+human_normal_start_frame = 8000
 
+human_normal_end_frame = 10000
+dados = dados[human_pendelluft_start_frame-1:human_pendelluft_end_frame-1]
+dados = dados[human_normal_start_frame-1:human_normal_end_frame-1]
+'''
+(N_frames, N_pixels) = np.shape(dados)		# atribui as dimensões nº de frames e de pixels por frame
+print((N_frames, N_pixels))
+#N_frames = 4000 # vamos limitar a qtd de frames se nao meu PC pega fogo
 minimo = np.amin(dados[9:-10,:],axis=0)		# vetor com o frame "minimo"
 
 r = c = int(np.sqrt(N_pixels)) # r = c = 32		# r e c tem as dimensoes do frame
@@ -79,7 +89,7 @@ for fr in np.arange(N_frames):
 	imagem2d = skt.rotate(imagem2d, -90)
 	Imagens[:,:,fr] = imagem2d
 
-Imagens = svd.apply_video_svd(Imagens)
+#Imagens = svd.apply_video_svd(Imagens)
 
 # here we initialize the empty arrays u and v, which will hold the motion field vectors
 u = np.empty([r,c,N_frames-1])	# x axis motion field vector
@@ -110,6 +120,7 @@ X, Y = np.meshgrid(np.arange(r),np.arange(c))	# creates a meshgrid with dimensio
 
 # loop a seguir itera pelos frames de 'Imagens'
 print(f"Rendering and saving pictures to {image_folder}. If you wish to break/stop it, do it the hard way (CTRL C).")
+N_frames = 200
 for it in np.arange(N_frames-1): #np.arange(N_frames-1)
 	plt.figure(dpi=500)
 	plt.imshow(Imagens[:,:,it],vmin=0,vmax=B)	# pega o frame e equaliza a partir de B=vmax
@@ -119,6 +130,6 @@ for it in np.arange(N_frames-1): #np.arange(N_frames-1)
 	plt.quiver(X, Y, u[:,:,it],-v[:,:,it])		# pyplot's function for plotting quivers
 												# receives u and v for the respective frame
 												#
-	plt.savefig(f'{image_folder}Image{it:04.0f}.png',bbox_inches='tight')
+	plt.savefig(f'{image_folder}Image{it+human_pendelluft_start_frame:04.0f}_(full_video).png',bbox_inches='tight')
 	#plt.show()
 	plt.close()

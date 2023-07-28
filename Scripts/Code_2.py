@@ -37,7 +37,7 @@ root.withdraw()
 file_path = filedialog.askopenfilename(title = "Abra o arquivo gerado em Code_1.py (Images_U_V.mat)", filetypes=(("Arquivos MAT","*.mat"),("Todos os arquivos","*.*")))	# open explorer
 main_folder = os.path.split(file_path)[0]+'/' #	pasta que contém o arquivo escolhido
 Mat_File = loadmat(file_path)	# open the file in python
-autoseg.segment_lung(Mat_File, main_folder, show_mask=True)
+autoseg.segment_lung(Mat_File, main_folder, threshold = 0.1350, show_mask=True) #threshold should be changed to reflect "Mask_tester.py" results
 
 # decompose that Mat_File into MFVs u and v
 u = Mat_File['u']
@@ -53,15 +53,21 @@ potE = np.empty([r,c,N_length])	# Divergence-Free potential
 potW = np.empty([r,c,N_length])	# Curl-Free potentials
 
 initial_time_seconds = time.time()
+delta_time_sum = 0
 
 for i in np.arange(N_length):
+	first_delta = time.time()
 	potE[:,:,i], potW[:,:,i] = rdhhd.runDHHD(u[:,:,i],v[:,:,i]) #[2:4] with original runDHHD; 'show_time' = True to show time to exit potential2
-	print(f'Análise {(i+1)}/{N_length+1}', end='\r')
+	second_delta = time.time() - first_delta
+	delta_time_sum += second_delta
+	tempo_por_frame = delta_time_sum/(i+1)
+	tempo_estimado = (N_length-i)*tempo_por_frame
+	print(f'Análise {(i+1)}/{N_length+1}\t|\tTempo restante: {tempo_estimado/60:.0f} min', end='\r')
 
 delta_time_seconds = time.time() - initial_time_seconds
 seconds = time.time()
 local_time = time.ctime(seconds)
-time_string = f"{local_time} - Tempo levado = {delta_time_seconds:.0f} s ou {delta_time_seconds/60:.0f} min"
+time_string = f"{local_time} - Tempo levado = {delta_time_seconds:.0f} s ou {delta_time_seconds/60:.0f} min   "
 
 print(f"\nFim das análises\n {time_string}")
 

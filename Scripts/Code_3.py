@@ -32,6 +32,7 @@ import skimage.morphology as skim
 #
 import posicoes as CalcPos
 import freqmap as CalcFreq
+import timeit
 
 #########################################
 # Initialize tkinter (Tk)
@@ -46,6 +47,8 @@ root.withdraw()
 file_path_pot = filedialog.askopenfilename(title = "Abra o arquivo dos potenciais (potenciaisE_W.mat)", filetypes=(("Arquivos MAT","*.mat"),("Todos os arquivos","*.*")))	# open explorer
 pot_folder = os.path.split(file_path_pot)[0]+'/' #	pasta que contém o arquivo escolhido
 pot_file = loadmat(file_path_pot)	# open the file in python
+
+start_time = timeit.default_timer()
 
 potE = pot_file['potE']
 potW = pot_file['potW']
@@ -76,7 +79,7 @@ arr_potW = [np.zeros((r,c,N_length)), np.zeros((r,c,N_length)), np.zeros((r,c,N_
 
 for i in np.arange(N_length):
 	arr_pot[0][:,:,i] = skim.local_maxima(potE[:,:,i],connectivity=8)	#	keep in mind (for the future) that using the param indices=True will return the tuple list of where max or min is (the indexes)
-	arr_pot[1][:,:,i] = skim.local_minima(potE[:,:,i],connectivity=8)	#		thus making unnecessary to do this fucking shit and then go on the list adventure of lines 94-103
+	arr_pot[1][:,:,i] = skim.local_minima(potE[:,:,i],connectivity=8)	#		thus making unnecessary to do these hellbent lists and then go on to the list adventure of lines 97-106
 	arr_pot[2][:,:,i] = skim.local_maxima(potW[:,:,i],connectivity=8)
 	arr_pot[3][:,:,i] = skim.local_minima(potW[:,:,i],connectivity=8)
 
@@ -105,7 +108,7 @@ for i in range(4):
 
 ### Frequency Maps
 
-def go_min(posmin, pot, D=6, rad=5):
+def go_min(posmin, pot, D=6, rad=5):  # keep in mind that D is an important value and, at this time, needs to manually be changed when changing subject type
 	minimo = 10
 	L, Cmin = CalcFreq.calc_freq(posmin, D, rad, r, c)
 	Lmin = np.zeros(np.shape(L)[0])
@@ -120,7 +123,7 @@ def go_min(posmin, pot, D=6, rad=5):
 	print('*', end='')
 	return L, Cmin, Lmin
 
-def go_max(posmax, pot, D=6, rad=5):
+def go_max(posmax, pot, D=6, rad=5):  # keep in mind that D is an important value and, at this time, needs to manually be changed when changing subject type
 	maximo = -5
 	L, Cmax = CalcFreq.calc_freq(posmax, D, rad, r, c)
 	Lmax = np.zeros(np.shape(L)[0])
@@ -175,14 +178,15 @@ for i in range(2,4):
 
 	print(']')
 
+end_time = timeit.default_timer()
 # Here lies image showing time again, kids!
 
 plt.figure()
 plt.subplot(221)
 PLot = arr_E[0]+arr_E[1]
 plt.imshow(PLot)
-plt.plot(arr_LE[1][:,0],arr_LE[1][:,1],'kx')
-plt.plot(arr_LE[0][:,0],arr_LE[0][:,1],'kx')
+plt.plot(arr_LE[1][:,0],arr_LE[1][:,1],'rx')
+plt.plot(arr_LE[0][:,0],arr_LE[0][:,1],'rx')
 plt.axis('off')
 plt.colorbar()
 plt.axvline(mask_center,color='k')
@@ -191,8 +195,8 @@ plt.title('E max')
 plt.subplot(222)
 PLot = arr_W[0]+arr_W[1]
 plt.imshow(PLot)
-plt.plot(arr_LW[1][:,0],arr_LW[1][:,1],'kx')
-plt.plot(arr_LW[0][:,0],arr_LW[0][:,1],'kx')
+plt.plot(arr_LW[1][:,0],arr_LW[1][:,1],'rx')
+plt.plot(arr_LW[0][:,0],arr_LW[0][:,1],'rx')
 plt.axis('off')
 plt.colorbar()
 plt.axvline(mask_center,color='k')
@@ -201,8 +205,8 @@ plt.title('W max')
 plt.subplot(223)
 PLot = arr_E[2]+arr_E[3]
 plt.imshow(PLot)
-plt.plot(arr_LE[2][:,0],arr_LE[2][:,1],'kx')
-plt.plot(arr_LE[3][:,0],arr_LE[3][:,1],'kx')
+plt.plot(arr_LE[2][:,0],arr_LE[2][:,1],'rx')
+plt.plot(arr_LE[3][:,0],arr_LE[3][:,1],'rx')
 plt.axis('off')
 plt.colorbar()
 plt.axvline(mask_center,color='k')
@@ -211,8 +215,8 @@ plt.title('E min')
 plt.subplot(224)
 PLot = arr_W[2]+arr_W[3]
 plt.imshow(PLot)
-plt.plot(arr_LW[2][:,0],arr_LW[2][:,1],'kx')
-plt.plot(arr_LW[3][:,0],arr_LW[3][:,1],'kx')
+plt.plot(arr_LW[2][:,0],arr_LW[2][:,1],'rx')
+plt.plot(arr_LW[3][:,0],arr_LW[3][:,1],'rx')
 plt.axis('off')
 plt.colorbar()
 plt.axvline(mask_center,color='k')
@@ -258,3 +262,5 @@ savemat((pot_folder+'calculos_freqmap.mat'),{'arr_E': arr_E, 'arr_W':arr_W, 'arr
 print('\n\n----------------------------------------------------')
 print(f'\nDivergence-Free Potentials: {LE_phi} | {RE_phi}\n')
 print(f'\nCurl-Free Potentials: {LW_phi} | {RW_phi}\n')
+delta_time = end_time - start_time
+print(f'\nLevou {delta_time} segundos!')

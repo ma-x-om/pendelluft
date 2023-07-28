@@ -10,11 +10,9 @@ def calc_freq(Pos, D, rad, rows, columns):
 	for i in np.arange(a):
 		x = Pos[:,0,i]
 		x=x[np.nonzero(~np.isnan(x))] # pega os valores de x que são diferentes de NaN
-		#x = x[np.nonzero(x!=0)]
 		x = np.array(x, dtype=int)	
 		y = Pos[:,1,i]
 		y=y[np.nonzero(~np.isnan(y))]
-		#y = y[np.nonzero(y!=0)]
 		y = np.array(y, dtype=int)
 		if x.size != 0:
 			for j in np.arange(x.size):

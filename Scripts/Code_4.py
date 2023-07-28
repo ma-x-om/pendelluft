@@ -1,4 +1,4 @@
-## This code will calculate the Pendelluft degree in an specified 15 seconds analysis window
+## This code will calculate the Pendelluft degree Index using the frequency maps for min and max Curl-Free Potential Field generated in Code_3.py
 
 import cv2
 import numpy as np
@@ -6,7 +6,7 @@ from numpy import shape
 import timeit
 from scipy.io import loadmat
 
-def load_files():
+def load_files(potencial = 'W'):
 	import tkinter as tk
 	from tkinter import filedialog
 	import os
@@ -24,9 +24,11 @@ def load_files():
 	mask_file = loadmat(freqmap_folder+'LungMask.mat')
 	mask = mask_file['BW']
 
+	load_array = f'arr_{potencial}'
+	load_array_L = f'arr_L{potencial}'
 
-	arr_LW = freqmap_file['arr_LW'][0]
-	arr_W = freqmap_file['arr_W']
+	arr_LW = freqmap_file[load_array_L][0]
+	arr_W = freqmap_file[load_array]
 
 	return arr_W, arr_LW, mask
 
@@ -66,7 +68,8 @@ def haus_distance_table(array_A, array_B):		#	Responsável por gerar uma tabela 
 	return distances_array
 
 def Cm_calc(m_REF, M_GOAL, dist):				#	Calcula Cmax ou Cmin
-	Cm_here = np.float64(M_GOAL/m_REF)/dist
+	#Cm_here = np.float64(M_GOAL/m_REF)/dist
+	Cm_here = np.float64(1/abs(M_GOAL-m_REF))/dist
 
 	return Cm_here
 
@@ -179,7 +182,7 @@ def Pd_I_Calc(array_max, array_min, relation="i/a"):
 		pair_REF = a_REF[int(lista_pares[i][1])]
 		pair_GOAL = a_GOAL[int(lista_pares[i][0])]
 		Cm[i] = Cm_calc(pair_REF[2], pair_GOAL[2], lista_pares[i][2])
-		print(f"  {pair_REF[:2]} {pair_GOAL[:2]}      {np.sqrt(lista_pares[i][2]):.0f}           {pair_GOAL[2]/pair_REF[2]:.2f}        {Cm[i]:.3f}")
+		print(f"  {pair_REF[:2]} {pair_GOAL[:2]}      {np.sqrt(lista_pares[i][2]):.0f}           {pair_GOAL[2]/pair_REF[2]:.2f}        {Cm[i]:.4f}")
 		Cm_sum += 1/Cm[i]
 		pares_address[i] = pair_REF[:2], pair_GOAL[:2]
 
@@ -221,3 +224,5 @@ arr_Wminpoints_values = organize_values(arr_Wminpoints, arr_Wmin, "mínimo")
 
 print('\n')
 Pd_I_Calc(arr_Wmaxpoints_values, arr_Wminpoints_values, 'i/a')
+
+# i/a = max -> min

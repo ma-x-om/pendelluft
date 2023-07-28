@@ -42,7 +42,7 @@ def plotar_hidden(img, x, y, u, v, frame):
 	plt.axis('off')
 	plt.colorbar()
 	plt.quiver(x, y, u,-v)
-	plt.savefig(f'Renders/Comparisons/Frame_{frame}.png',bbox_inches='tight')
+	plt.savefig(f'Frame_{frame}.png',bbox_inches='tight')
 	plt.close()
 
 def plotar_intervalo(dados_normal):
@@ -69,7 +69,7 @@ def main():
 		img, u, v = segment(dados)
 		plotar(img, u, v)
 		#plotar(segment(load_img()))
-		q = input('Repetir? (s/ss/n)\n')
+		q = input('Repetir? (s - carregar outro arquivo/f - mudar o frame/p - plot misterioso/n)\n')
 		if q == 'n':
 			repetir = False
 		if q == 'f':
@@ -78,5 +78,6 @@ def main():
 			new_norm = True
 		if q == 'p':
 			plotar_intervalo(dados)
+			repetir = False
 
 main()

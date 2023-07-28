@@ -5,8 +5,10 @@ import matplotlib.pyplot as plt
 import numpy as np
 from scipy.ndimage import convolve as filter2
 import cv2
+import timeit
 import tkinter as tk
 from tkinter import filedialog
+from matplotlib.patches import Rectangle
 
 #########################################
 # Initialize tkinter (Tk)
@@ -38,7 +40,12 @@ def draw_quiver(u,v,beforeImg,OF_type):
     scale = 3
     ax = plt.figure().gca()
     ax.imshow(beforeImg, cmap = 'gray')
-    #plt.axis('off')
+    plt.axis('off')
+
+    r, c = np.shape(u)
+
+    d = np.sqrt(r**2 + c**2)
+    arr_h_w = d/90
 
     magnitudeAvg = get_magnitude(u, v)
     
@@ -51,13 +58,43 @@ def draw_quiver(u,v,beforeImg,OF_type):
             if magnitude > magnitudeAvg:
                 ax.arrow(j,i, dx, dy, length_includes_head= True, head_width=2, color = 'red')
 
+    arr_au = abs(u.max())
+    arr_iu = abs(u.min())
+    arr_av = abs(v.max())
+    arr_iv = abs(v.min())
+
+    arr_u = max(arr_au,arr_iu)
+    arr_v = max(arr_av,arr_iv)
+
+    arr_m = (arr_u+arr_v)/2
+
+    reta_x = c*0.0625
+    reta_y = 0
+    reta_L = c*0.15625
+    reta_H = r*0.09375
+
+    ax.add_patch(Rectangle((reta_x, reta_y), reta_L, reta_H, facecolor='white',edgecolor='black',fill=True,lw=2))
+    ax.arrow((reta_x+reta_L/3),reta_H*2/3, arr_m, 0, length_includes_head= True, head_width=reta_H/6, color = 'red')
+    ax.text(reta_x+reta_L/2, reta_H/3, f'{arr_m/3:.3f} px', fontsize=8,ha='center', va='center')
+
     plt.draw()
     plt.xlim([0,c])
     plt.ylim([r,0])
-    plt.title(f"Quivers from {OF_type}")
+    #plt.title(f"Quivers from {OF_type}")
     plt.savefig(f'{image_folder}{OF_type}_flow_quivers.png',bbox_inches='tight')
     plt.close()
     #plt.show()
+
+def draw_quiver2(u,v,beforeImg,OF_type):
+    ax = plt.figure().gca()
+    ax.imshow(beforeImg, cmap = 'gray')
+    plt.axis('off')
+    r, c = np.shape(u)
+    X, Y = np.meshgrid(np.arange(r),np.arange(c))
+    ax.quiver(X, Y, u,-v, color='red')
+    plt.savefig(f'{image_folder}{OF_type}_flow_quivers.png',bbox_inches='tight')
+    plt.close()
+
 
 def draw_comparison(UF, VF, UH, VH, img):
 	scale = 3
@@ -155,14 +192,14 @@ def computeHS(beforeImg, afterImg, alpha, delta):
     return u, v
 
 def draw_vectors(vector, Vec_type, OF_type):
-	plt.figure(dpi=200)
+	plt.figure(dpi=300)
 	plt.imshow(vector)
 	plt.axis('off')
 	plt.colorbar()
 	#plt.quiver(X, Y, u,-v)		# pyplot's function for plotting quivers
 												# receives u and v for the respective frame
 												#
-	plt.title(f'{OF_type} - {Vec_type}')
+	#plt.title(f'{OF_type} - {Vec_type}')
 	plt.savefig(f'{image_folder}{OF_type}_flow_{Vec_type}.png',bbox_inches='tight')
 	plt.close()
 
@@ -183,26 +220,40 @@ if not isExist:
    # Create a new directory because it does not exist
    os.makedirs(image_folder)
 
-print('Wait some time...')
+print('Wait a little...')
 frame1 = cv2.imread(file_path1,0).astype(float)				# atribui o texto do arquivo à variável "dados"
 frame2 = cv2.imread(file_path2,0).astype(float)			# atribui o texto do arquivo à variável "dados"
 (r, c) = np.shape(frame1)		# atribui as dimensões nº de frames e de pixels por frame
+avg_size = (os.path.getsize(file_path1)+os.path.getsize(file_path2))/2
+file_info = f"Files info:\n\tdimensions: {r} x {c}\n\taverage size: {avg_size/1024:.2f} kb\n\n"
 
 Imagens = np.empty([r,c,2])			# great array to hold the future images
 tempoIm = []								# initialize empty lists
 tempocv = []
 
-
+farneback_start_time = timeit.default_timer()
 # here we calculate the optical flow
 # let's use Farneback instead of H&S
 # Farneback Optical Flow Calc with default parameters
 flow = cv2.calcOpticalFlowFarneback(frame1, frame2, None, 0.5, 3, 15, 3, 5, 0, 0) #1.2 is used as 0 in john's code
+farneback_end_time = timeit.default_timer()
+farneback_delta_time = farneback_end_time - farneback_start_time
 # we then split "flow" array components into u's and v's corresponding "frame"
 u_Farneback, v_Farneback = flow[:,:,0], flow[:,:,1]
-print("Farneback calculated.")
+print(f"Farneback calculated. Took {farneback_delta_time:.3f} seconds\n\nNow this will take a little more: Calculating HornSchunck...")
 
+hs_start_time = timeit.default_timer()
 u_HS, v_HS = computeHS(frame2, frame1, alpha = 15, delta = 10**-1)
-print("HornSchunck calculated.")
+hs_end_time = timeit.default_timer()
+hs_delta_time = hs_end_time - hs_start_time
+print(f"HornSchunck calculated. Took {hs_delta_time:.3f} seconds.\n\nNow preparing plots...")
+
+if farneback_delta_time < hs_delta_time:
+    time_log = f'Farneback (cv2.calcOpticalFlowFarneback)\n--> Took {farneback_delta_time:.5f} seconds\nHorn & Schunck (lmiz100)\n--> Took {hs_delta_time:.5f} seconds\n\n Farneback was {hs_delta_time/farneback_delta_time:.2f} times faster than Horn & Schunck'
+else:
+    time_log = f'Farneback (cv2.calcOpticalFlowFarneback)\n--> Took {farneback_delta_time:.5f} seconds\nHorn & Schunck (lmiz100)\n--> Took {hs_delta_time:.5f} seconds\n\n Horn & Schunck was {farneback_delta_time/hs_delta_time:.2f} times faster than Farneback'
+with open(f'{image_folder}run_log.txt', 'w') as f:
+    f.write(f'{file_info}\n{time_log}')
 
 draw_vectors(u_Farneback, 'U', 'Farneback')
 draw_vectors(v_Farneback, 'V', 'Farneback')
@@ -210,9 +261,10 @@ draw_vectors(u_HS, 'U', 'HornSchunck')
 draw_vectors(v_HS, 'V', 'HornSchunck')
 
 draw_quiver(u_Farneback, v_Farneback, frame1, 'Farneback')
+
 draw_quiver(u_HS, v_HS, frame1, 'HornSchunck')
 
-draw_comparison(u_Farneback, v_Farneback, u_HS, v_HS, frame1)
+#draw_comparison(u_Farneback, v_Farneback, u_HS, v_HS, frame1)
 
 
-print("The end?")
+print("Finished")

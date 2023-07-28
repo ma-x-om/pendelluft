@@ -3,7 +3,7 @@
 Created on Mon Jan 14 12:31:44 2019
 
 @author: vgmarques and John Sims
-@botched by: Mateus Ramirez
+@adapted by: Mateus Ramirez
 """
 import numpy as np
 import potential_calculation2 as pt2
